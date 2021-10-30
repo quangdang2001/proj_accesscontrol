@@ -35,9 +35,9 @@ public class Data implements Serializable {
     }
     public void write(Data data) {  //ghi theo Object
         try {   // dat try cacth de tranh ngoai le khi tao va ghi File
-            FileOutputStream f = new FileOutputStream("data.txt");   // tao file f tro den student.dat
+            FileOutputStream f = new FileOutputStream("data.txt");   // tao file f tro den data.dat
             ObjectOutputStream oStream = new ObjectOutputStream(f); // dung de ghi theo Object vao file f
-            oStream.writeObject(data);   // ghi student theo kieu Object vao file
+            oStream.writeObject(data);   // ghi data theo kieu Object vao file
             oStream.close();
         } catch (IOException e) {
             System.out.println("Error Write file");
@@ -47,9 +47,9 @@ public class Data implements Serializable {
     public Data read() {       // doc theo Object
         Data data = null;
         try {   // dat try cacth de tranh ngoai le khi tao va doc File
-            FileInputStream f = new FileInputStream("data.txt"); // tao file f tro den student.dat
+            FileInputStream f = new FileInputStream("data.txt"); // tao file f tro den data.dat
             ObjectInputStream inStream = new ObjectInputStream(f);  // dung de doc theo Object vao file f
-            // dung inStream doc theo Object, ep kieu tra ve la Student
+            // dung inStream doc theo Object, ep kieu tra ve la data
             data = (Data) inStream.readObject();
             inStream.close();
         } catch (ClassNotFoundException e) {

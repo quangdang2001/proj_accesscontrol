@@ -11,10 +11,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -109,16 +106,20 @@ public class ModifyView implements Initializable {
     }
 
     public void selectListView(MouseEvent mouseEvent) {
-        clearBtn();
-        String user;
-        user= (String) listUser.getSelectionModel().getSelectedItem();
-        for (User tempUser :User.listUser){
-            if(tempUser.getUserName().equals(user)){
-                userSelected=tempUser;
-                setBtn(ACM.getACL().get(objectModelSelected).get(userSelected));
-                break;
-            }
+        try {
+            clearBtn();
+            String user;
+            user = (String) listUser.getSelectionModel().getSelectedItem();
+            for (User tempUser : User.listUser) {
+                if (tempUser.getUserName().equals(user)) {
+                    userSelected = tempUser;
+                    setBtn(ACM.getACL().get(objectModelSelected).get(userSelected));
+                    break;
+                }
 
+            }
+        } catch (Exception e){
+            System.out.println("");
         }
 
 
@@ -141,12 +142,24 @@ public class ModifyView implements Initializable {
     }
 
     public void Save(ActionEvent event) {
-        ACM.setPermission(objectModelSelected,userSelected,getPermission());
-        Data data = new Data();
-        data.saveData();
-        data.write(data);
-
-        System.out.println("Done");
+        try {
+            ACM.setPermission(objectModelSelected,userSelected,getPermission());
+            Data data = new Data();
+            data.saveData();
+            data.write(data);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Save");
+            alert.setHeaderText(null);
+            alert.setContentText("Successfully!");
+            alert.showAndWait();
+            System.out.println("Done");
+        }catch (Exception e){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Save");
+            alert.setHeaderText(null);
+            alert.setContentText("Error!");
+            alert.showAndWait();
+        }
 
     }
     private void setBtn(String permission){
