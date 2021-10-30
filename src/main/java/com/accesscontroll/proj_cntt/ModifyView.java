@@ -15,6 +15,8 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
@@ -22,6 +24,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class ModifyView implements Initializable {
@@ -36,7 +39,8 @@ public class ModifyView implements Initializable {
     @FXML
     private CheckBox btnExecute;
 
-    TreeItem<String> rootItem = new TreeItem<>("Files");
+    TreeItem<String> rootItem = new TreeItem<>("Files",
+            new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("folders.png")))));
     ObjectModel objectModelSelected;
     User userSelected;
     HashMap<User,String> userAccessSelected;
@@ -53,8 +57,16 @@ public class ModifyView implements Initializable {
         ArrayList<String> objName= new ArrayList<>();
         for(ObjectModel obj : ObjectModel.getListObject()){
             if (obj.getLocation().equals(rootPath)){
-                item.setValue(obj.getLocation()+obj.getObjectName());
-                rootItem.getChildren().add(item);
+                if (obj.getType().equals("folder")){
+                    item = new TreeItem<>(obj.getLocation()+obj.getObjectName()
+                            ,new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("folders.png")))));
+                    rootItem.getChildren().add(item);
+                }else {
+                    item = new TreeItem<>(obj.getLocation()+obj.getObjectName()
+                            ,new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("files.png")))));
+                    rootItem.getChildren().add(item);
+                }
+
             }
         }
 
@@ -68,14 +80,20 @@ public class ModifyView implements Initializable {
     }
 
     public void selectTreeItem(MouseEvent mouseEvent) {
+        clearBtn();
         TreeItem<String> item = (TreeItem<String>) treeView.getSelectionModel().getSelectedItem();
         if (item!=null) {
             String value = item.getValue();
             int size = item.getChildren().size();
             if (size == 0) {
                 for (ObjectModel obj : ObjectModel.getListObject()) {
-                    if (obj.getLocation().equals(value + "\\")) {
-                        item.getChildren().add(new TreeItem<String>(obj.getLocation() + obj.getObjectName()));
+                    if (obj.getLocation().equals(value+"\\")) {
+                        if (obj.getType().equals("folder"))
+                            item.getChildren().add(new TreeItem<String>(obj.getLocation() + obj.getObjectName()
+                                    ,new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("folders.png"))))));
+                        else
+                            item.getChildren().add(new TreeItem<String>(obj.getLocation() + obj.getObjectName()
+                                    ,new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("files.png"))))));
                     }
                 }
             }
@@ -91,13 +109,18 @@ public class ModifyView implements Initializable {
     }
 
     public void selectListView(MouseEvent mouseEvent) {
+        clearBtn();
         String user;
         user= (String) listUser.getSelectionModel().getSelectedItem();
         for (User tempUser :User.listUser){
             if(tempUser.getUserName().equals(user)){
                 userSelected=tempUser;
+                setBtn(ACM.getACL().get(objectModelSelected).get(userSelected));
+                break;
             }
+
         }
+
 
     }
 
@@ -122,8 +145,22 @@ public class ModifyView implements Initializable {
         Data data = new Data();
         data.saveData();
         data.write(data);
-        ACM.printACM();
+
         System.out.println("Done");
 
+    }
+    private void setBtn(String permission){
+        if (permission==null) {
+            clearBtn();
+        }else {
+            if (permission.contains("r")) btnRead.setSelected(true);
+            if (permission.contains("w")) btnWrite.setSelected(true);
+            if (permission.contains("x")) btnExecute.setSelected(true);
+        }
+    }
+    private void clearBtn(){
+        btnWrite.setSelected(false);
+        btnRead.setSelected(false);
+        btnExecute.setSelected(false);
     }
 }

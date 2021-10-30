@@ -12,6 +12,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
@@ -38,7 +40,7 @@ public class ShowView implements Initializable {
     private Scene scene;
     private Parent parent;
 
-    TreeItem<String> rootItem = new TreeItem<>("Files");
+    TreeItem<String> rootItem = new TreeItem<>("Files",new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("folders.png")))));
     ObjectModel objectModelSelected;
     HashMap<User,String> userAccessSelected;
     @Override
@@ -54,8 +56,16 @@ public class ShowView implements Initializable {
         ArrayList<String> objName= new ArrayList<>();
         for(ObjectModel obj : ObjectModel.getListObject()){
             if (obj.getLocation().equals(rootPath)){
-                item.setValue(obj.getLocation()+obj.getObjectName());
-                rootItem.getChildren().add(item);
+                if (obj.getType().equals("folder")){
+                    item = new TreeItem<>(obj.getLocation()+obj.getObjectName()
+                            ,new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("folders.png")))));
+                    rootItem.getChildren().add(item);
+                }else {
+                    item = new TreeItem<>(obj.getLocation()+obj.getObjectName()
+                            ,new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("files.png")))));
+                    rootItem.getChildren().add(item);
+                }
+
             }
         }
 
@@ -76,7 +86,12 @@ public class ShowView implements Initializable {
             if (size==0) {
                 for (ObjectModel obj : ObjectModel.getListObject()) {
                     if (obj.getLocation().equals(value+"\\")) {
-                        item.getChildren().add(new TreeItem<String>(obj.getLocation() + obj.getObjectName()));
+                        if (obj.getType().equals("folder"))
+                        item.getChildren().add(new TreeItem<String>(obj.getLocation() + obj.getObjectName()
+                                ,new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("folders.png"))))));
+                        else
+                            item.getChildren().add(new TreeItem<String>(obj.getLocation() + obj.getObjectName()
+                                    ,new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("files.png"))))));
                     }
                 }
             }
@@ -88,7 +103,6 @@ public class ShowView implements Initializable {
                 }
             }
             userAccessSelected = ACM.getACL().get(objectModelSelected);
-            ACM.printACM();
             if (userAccessSelected!=null) {
                 Set<User> userName = userAccessSelected.keySet();
                 for (User tempUser : userName) {
@@ -107,28 +121,24 @@ public class ShowView implements Initializable {
         for (User tempUser : userAccessSelected.keySet()){
             if(tempUser.getUserName().equals(user)){
                 setBtn(userAccessSelected.get(tempUser));
+                break;
             }
         }
     }
 
-    private void  disableBtn(){
-        btnExecute.setDisable(true);
-        btnRead.setDisable(true);
-        btnWrite.setDisable(true);
-    }
-    private void clearBtn(){
+    public void clearBtn(){
         btnWrite.setSelected(false);
         btnRead.setSelected(false);
         btnExecute.setSelected(false);
     }
-    private void setBtn(String permission){
+    public void setBtn(String permission){
         clearBtn();
         if (permission.contains("r")) btnRead.setSelected(true);
         if (permission.contains("w")) btnWrite.setSelected(true);
         if (permission.contains("x")) btnExecute.setSelected(true);
     }
-    private String getLocation(String name){
-        return name.substring(0,name.lastIndexOf("\\")) + "\\";
+    public String getLocation(String name){
+        return name.substring(0,name.lastIndexOf("/")) + "/";
     }
 
     public void switchToModify(ActionEvent event) throws IOException {
