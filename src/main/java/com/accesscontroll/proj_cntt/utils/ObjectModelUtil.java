@@ -12,7 +12,7 @@ import java.nio.file.Paths;
 
 public class ObjectModelUtil {
 
-    public static void createObject(ObjectModel objectModel){
+    public static boolean createObject(ObjectModel objectModel){
         String type = objectModel.getType();
         if (type.equals("file")){
             try {
@@ -22,8 +22,10 @@ public class ObjectModelUtil {
                 if (file.createNewFile()) {
                     System.out.println("File is created!");
                     addOject(objectModel);
+                    return true;
                 } else {
                     System.out.println("File already exists.");
+                    return false;
                 }
 
             } catch (IOException e) {
@@ -38,13 +40,16 @@ public class ObjectModelUtil {
                     Files.createDirectory(path);
                     System.out.println("Create path = " + path + " successfully!");
                     addOject(objectModel);
+                    return true;
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             } else {
                 System.out.println("Path = " + path + " is existed!");
+                return false;
             }
         }
+        return false;
     }
 
     public static void deleteObject(ObjectModel objectModel){

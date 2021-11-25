@@ -56,6 +56,12 @@ public class ACM {
     public  static void removeObject(ObjectModel objectModel){
         ACL.remove(objectModel);
     }
+    public static void removeUserForACL(User user){
+        for (ObjectModel objectModel : ACM.getACL().keySet()){
+            ACM.ACL.get(objectModel).remove(user);
+        }
+    }
+
     public static void removeUser(User user){
         CL.remove(user);
     }
