@@ -45,8 +45,6 @@ public class ShowView implements Initializable {
     HashMap<User,String> userAccessSelected;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-//        String path = url.getPath();
-//        System.out.println(path);
 
         String rootPath="D:\\";
         Data data = new Data();
@@ -68,9 +66,6 @@ public class ShowView implements Initializable {
 
             }
         }
-
-        ArrayList<String> containerList = new ArrayList<>();
-
 
         treeView.setRoot(rootItem);
     }
@@ -137,9 +132,7 @@ public class ShowView implements Initializable {
         if (permission.contains("w")) btnWrite.setSelected(true);
         if (permission.contains("x")) btnExecute.setSelected(true);
     }
-    public String getLocation(String name){
-        return name.substring(0,name.lastIndexOf("/")) + "/";
-    }
+
 
     public void switchToModify(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource( "modify-view.fxml"));

@@ -14,21 +14,19 @@ public class Data implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private ArrayList<User> listUser;
-    private HashSet<GroupUser> groupUsers;
+
     private ArrayList<ObjectModel> listObject;
     private HashMap<ObjectModel, HashMap<User,String>> ACL;
     private HashMap<User,HashMap<ObjectModel,String>> CL;
 
     public void saveData(){
         listUser = User.listUser;
-        groupUsers = GroupUser.groupUsers;
         listObject = ObjectModel.listObject;
         ACL = ACM.getACL();
         CL = ACM.getCL();
     }
     public void getAllData(){
         User.listUser = listUser;
-        GroupUser.groupUsers = groupUsers;
         ObjectModel.listObject = listObject;
         ACM.setACL(ACL);
         ACM.setCL(CL);
@@ -67,14 +65,6 @@ public class Data implements Serializable {
         this.listUser = listUser;
     }
 
-    public HashSet<GroupUser> getGroupUsers() {
-        return groupUsers;
-    }
-
-    public void setGroupUsers(HashSet<GroupUser> groupUsers) {
-        this.groupUsers = groupUsers;
-    }
-
     public ArrayList<ObjectModel> getListObject() {
         return listObject;
     }
@@ -95,7 +85,7 @@ public class Data implements Serializable {
         return CL;
     }
 
-    public void setCL(HashMap<User, HashMap<ObjectModel, String>> CL) {
+        public void setCL(HashMap<User, HashMap<ObjectModel, String>> CL) {
         this.CL = CL;
     }
 }

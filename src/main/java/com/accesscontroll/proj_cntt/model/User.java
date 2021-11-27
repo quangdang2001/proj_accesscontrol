@@ -33,13 +33,7 @@ public class User implements Serializable {
         this.userName = userName;
     }
 
-    public String getGroupUser() {
-        return groupUser;
-    }
 
-    public void setGroupUser(String groupUser) {
-        this.groupUser = groupUser;
-    }
 
     @Override
     public String toString() {

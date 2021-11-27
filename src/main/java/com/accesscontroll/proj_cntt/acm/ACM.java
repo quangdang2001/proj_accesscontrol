@@ -17,21 +17,6 @@ public class ACM {
     private static HashMap<ObjectModel,HashMap<User,String>> ACL = new HashMap<>();
     private static HashMap<User,HashMap<ObjectModel,String>> CL = new HashMap<>();
 
-    private static boolean checkPermission(String pemission){
-
-        if (pemission.length()>3){
-            //Kiem tra nho hon 3 phan tu
-            return false;
-        }else
-            //Kiem tra khong co phan tu khac rwx
-            if (Pattern.matches(pemission,"[^rwx]{1}")) return false;
-        else {
-                //Kiem tra khong co phan tu trung lap
-                String[] tempString = pemission.split("");
-                Set tempSet = new HashSet(Arrays.asList(tempString));
-                return tempSet.size() >= tempString.length;
-            }
-    }
 
     public static void setPermission(ObjectModel object, User user, String pemission){
             if ( ACL.containsKey(object)) {

@@ -79,8 +79,6 @@ public class ModifyView implements Initializable {
             }
         }
 
-        ArrayList<String> containerList = new ArrayList<>();
-
         if(User.listUser!=null){
             for (User user : User.listUser){
                 listUser.getItems().add(user.getUserName());
@@ -91,7 +89,7 @@ public class ModifyView implements Initializable {
         treeView.setRoot(rootItem);
     }
 
-    public void selectTreeItem(MouseEvent mouseEvent) {
+    public void selectTreeItem() {
         clearBtn();
         TreeItem<String> item = (TreeItem<String>) treeView.getSelectionModel().getSelectedItem();
         if (item!=null) {
@@ -121,7 +119,7 @@ public class ModifyView implements Initializable {
 
     }
 
-    public void selectListView(MouseEvent mouseEvent) {
+    public void selectListView() {
         try {
             clearBtn();
             String user;
@@ -161,6 +159,13 @@ public class ModifyView implements Initializable {
     public void Save(ActionEvent event) {
         try {
             ACM.setPermission(objectModelSelected,userSelected,getPermission());
+            if (objectModelSelected.getType().equals("folder"))
+            for(ObjectModel objectModel : ObjectModel.getListObject()){
+                if (objectModel.getLocation().contains(objectModelSelected.getLocation()+objectModelSelected.getObjectName())){
+                    ACM.setPermission(objectModel,userSelected,getPermission());
+                }
+            }
+
             Data data = new Data();
             data.saveData();
             data.write(data);

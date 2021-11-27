@@ -7,7 +7,7 @@ public class ObjectModel implements Serializable {
     private String objectName;
     private String type;
     private String location;
-    private User owner;
+
 
     public static ArrayList<ObjectModel> listObject = new ArrayList<>();
 
@@ -15,7 +15,6 @@ public class ObjectModel implements Serializable {
         this.objectName = objectName;
         this.type = type;
         this.location = location;
-        this.owner = owner;
     }
 
     public ObjectModel() {
@@ -27,10 +26,6 @@ public class ObjectModel implements Serializable {
 
     public static void setListObject(ArrayList<ObjectModel> listObject) {
         ObjectModel.listObject = listObject;
-    }
-
-    public static void createObject(ObjectModel object){
-        listObject.add(object);
     }
 
     public String getObjectName() {
@@ -57,13 +52,6 @@ public class ObjectModel implements Serializable {
         this.location = location;
     }
 
-    public User getOwner() {
-        return owner;
-    }
-
-    public void setOwner(User owner) {
-        this.owner = owner;
-    }
 
     @Override
     public String toString() {
@@ -71,7 +59,6 @@ public class ObjectModel implements Serializable {
                 "objectName='" + objectName + '\'' +
                 ", type='" + type + '\'' +
                 ", location='" + location + '\'' +
-                ", owner=" + owner +
                 '}';
     }
 }
